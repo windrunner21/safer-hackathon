@@ -2,6 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:safer_hackathon/ui/home-page.dart';
+import 'package:firebase_database/firebase_database.dart';
+
+final databaseReference = FirebaseDatabase.instance.reference();
 
 class VerifyPhonePage extends StatefulWidget {
   @override
@@ -251,6 +254,15 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
                             User user = (await auth
                                     .signInWithCredential(phoneAuthCredential))
                                 .user;
+
+                            databaseReference
+                                .child('citizens')
+                                .child(user.uid)
+                                .set({
+                              'fullName': widget.object['fullname'],
+                              'socialNumber': widget.object['socialId'],
+                              'phoneNumber': _phoneNumber,
+                            });
 
                             Navigator.push(
                               context,

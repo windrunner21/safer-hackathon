@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:safer_hackathon/ui/auth-components/forgot-password-page.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -257,13 +256,13 @@ Future<void> _setEmergencyContacts(context) async {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 SizedBox(
-                  width: MediaQuery.of(context).size.width / 1.8,
+                  width: MediaQuery.of(context).size.width / 2,
                   child: Text(
                     "Add emergency contacts",
                     style: TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF5b70d9),
+                      color: Color(0xFF364DB9),
                     ),
                   ),
                 ),
@@ -271,10 +270,69 @@ Future<void> _setEmergencyContacts(context) async {
                 Divider(
                   color: Colors.grey[400],
                 ),
-                SizedBox(height: 10),
-                Text(
-                  "Description",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 2.5,
+                      child: TextField(
+                        textCapitalization: TextCapitalization.words,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xFF364DB9),
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black12),
+                          ),
+                          hintText: 'Name',
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 2.5,
+                      child: TextField(
+                        textCapitalization: TextCapitalization.words,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xFF364DB9),
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black12),
+                          ),
+                          hintText: 'Surname',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15),
+                SizedBox(
+                  child: TextField(
+                    keyboardType: TextInputType.phone,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xFF364DB9),
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black12),
+                        ),
+                        prefixText: '+994 ',
+                        prefixIcon: Icon(
+                          Icons.smartphone,
+                          color: Color(0xFF364DB9),
+                        ),
+                        hintText: '(5x) xxx xx xx'),
+                  ),
                 ),
                 SizedBox(height: 20),
                 Divider(
@@ -288,14 +346,15 @@ Future<void> _setEmergencyContacts(context) async {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    color: Color(0xFF5b70d9),
-                    elevation: 4.0,
+                    color: Color(0xFF364DB9),
+                    elevation: 0,
                     child: Text(
-                      'Go Back',
-                      style: TextStyle(color: Colors.white),
+                      'Done',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24.0)),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
                   ),
                 )
               ],

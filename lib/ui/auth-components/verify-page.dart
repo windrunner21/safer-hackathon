@@ -20,6 +20,9 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Color(0xFF364DB9),
+        ),
         elevation: 0,
         backgroundColor: Colors.white,
       ),
@@ -30,15 +33,27 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
           children: <Widget>[
             Text(
               'Enter the Code',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              style: TextStyle(
+                  color: Color(0xFF364DB9),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24),
             ),
             Text(
               'to Verify Your Phone',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              style: TextStyle(
+                  color: Color(0xFF364DB9),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24),
             ),
             SizedBox(height: 20),
-            Text('We have sent you an SMS with a code to'),
-            Text('the number +994 (5x) xxx xx xx'),
+            Text(
+              'We have sent you an SMS with a code to',
+              style: TextStyle(color: Colors.grey[700]),
+            ),
+            Text(
+              'the number +994 (5x) xxx xx xx',
+              style: TextStyle(color: Colors.grey[700]),
+            ),
             SizedBox(height: 10),
             // custom sms code entering
             Row(
@@ -51,7 +66,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
                       focusNode: _focus1,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Colors.black,
+                          color: Color(0xFF364DB9),
                           fontWeight: FontWeight.w500,
                           fontSize: 30),
                       inputFormatters: [LengthLimitingTextInputFormatter(1)],
@@ -68,7 +83,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
                       focusNode: _focus2,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Colors.black,
+                          color: Color(0xFF364DB9),
                           fontWeight: FontWeight.w500,
                           fontSize: 30),
                       inputFormatters: [LengthLimitingTextInputFormatter(1)],
@@ -88,7 +103,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
                       focusNode: _focus3,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Colors.black,
+                          color: Color(0xFF364DB9),
                           fontWeight: FontWeight.w500,
                           fontSize: 30),
                       inputFormatters: [LengthLimitingTextInputFormatter(1)],
@@ -108,7 +123,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
                       focusNode: _focus4,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Colors.black,
+                          color: Color(0xFF364DB9),
                           fontWeight: FontWeight.w500,
                           fontSize: 30),
                       inputFormatters: [LengthLimitingTextInputFormatter(1)],
@@ -128,7 +143,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
                       focusNode: _focus5,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Colors.black,
+                          color: Color(0xFF364DB9),
                           fontWeight: FontWeight.w500,
                           fontSize: 30),
                       inputFormatters: [LengthLimitingTextInputFormatter(1)],
@@ -148,7 +163,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
                       focusNode: _focus6,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Colors.black,
+                          color: Color(0xFF364DB9),
                           fontWeight: FontWeight.w500,
                           fontSize: 30),
                       inputFormatters: [LengthLimitingTextInputFormatter(1)],

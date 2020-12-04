@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:safer_hackathon/ui/home-page.dart';
+import 'package:safer_hackathon/ui/auth-components/verify-page.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -40,7 +40,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
                 ),
-                padding: EdgeInsets.fromLTRB(20, 10, 20, 40),
+                padding: EdgeInsets.fromLTRB(20, 10, 20, 30),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -103,26 +103,6 @@ class _SignUpPageState extends State<SignUpPage> {
                             fontWeight: FontWeight.w500, color: Colors.black54),
                       ),
                     ),
-                    TextFormField(
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return 'Please enter your password';
-                        }
-                        return null;
-                      },
-                      keyboardType: TextInputType.visiblePassword,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        helperText: "ex. 1 uppercase, 1 digit, length > 8",
-                        labelStyle: TextStyle(
-                            fontWeight: FontWeight.w500, color: Colors.black54),
-                        prefixIcon: Icon(
-                          Icons.lock,
-                          color: Color(0xFF364DB9),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -134,7 +114,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => HomePage(),
+                        builder: (context) => VerifyPhonePage(),
                       ),
                     );
                   },

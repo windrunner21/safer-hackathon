@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:safer_hackathon/classes/phone-number-formatter.dart';
 import 'package:safer_hackathon/ui/home-page.dart';
 
 class SignInPage extends StatefulWidget {
@@ -53,6 +54,12 @@ class _SignInPageState extends State<SignInPage> {
                         return null;
                       },
                       keyboardType: TextInputType.phone,
+                      inputFormatters: [
+                        PhoneNumberFormatter(
+                          mask: '5x xxx xx xx',
+                          separator: ' ',
+                        ),
+                      ],
                       decoration: InputDecoration(
                         labelText: 'Phone Number',
                         labelStyle: TextStyle(

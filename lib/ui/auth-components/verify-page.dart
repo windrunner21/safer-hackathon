@@ -1,9 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:safer_hackathon/ui/home-page.dart';
 
 class VerifyPhonePage extends StatefulWidget {
   @override
   _VerifyPhonePageState createState() => _VerifyPhonePageState();
+
+  final object;
+  VerifyPhonePage({Key key, this.object}) : super(key: key);
 }
 
 class _VerifyPhonePageState extends State<VerifyPhonePage> {
@@ -15,8 +20,28 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
   final FocusNode _focus5 = FocusNode();
   final FocusNode _focus6 = FocusNode();
 
+  final _pin1 = TextEditingController();
+  final _pin2 = TextEditingController();
+  final _pin3 = TextEditingController();
+  final _pin4 = TextEditingController();
+  final _pin5 = TextEditingController();
+  final _pin6 = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    final _phoneNumber =
+        widget.object['phoneNumber'].toString().substring(0, 4) +
+            ' (' +
+            widget.object['phoneNumber'].toString().substring(4, 6) +
+            ') ' +
+            widget.object['phoneNumber'].toString().substring(6, 9) +
+            ' ' +
+            widget.object['phoneNumber'].toString().substring(9, 11) +
+            ' ' +
+            widget.object['phoneNumber']
+                .toString()
+                .substring(11, widget.object['phoneNumber'].toString().length);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -51,7 +76,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
               style: TextStyle(color: Colors.grey[700]),
             ),
             Text(
-              'the number +994 (5x) xxx xx xx',
+              'the number ' + _phoneNumber,
               style: TextStyle(color: Colors.grey[700]),
             ),
             SizedBox(height: 10),
@@ -63,6 +88,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 12,
                   child: TextField(
+                      controller: _pin1,
                       focusNode: _focus1,
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -80,6 +106,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 12,
                   child: TextField(
+                      controller: _pin2,
                       focusNode: _focus2,
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -100,6 +127,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 12,
                   child: TextField(
+                      controller: _pin3,
                       focusNode: _focus3,
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -120,6 +148,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 12,
                   child: TextField(
+                      controller: _pin4,
                       focusNode: _focus4,
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -140,6 +169,7 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 12,
                   child: TextField(
+                      controller: _pin5,
                       focusNode: _focus5,
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -160,21 +190,80 @@ class _VerifyPhonePageState extends State<VerifyPhonePage> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 12,
                   child: TextField(
-                      focusNode: _focus6,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Color(0xFF364DB9),
-                          fontWeight: FontWeight.w500,
-                          fontSize: 30),
-                      inputFormatters: [LengthLimitingTextInputFormatter(1)],
-                      onChanged: (str) {
-                        if (str.length == 0) {
-                          FocusScope.of(context).requestFocus(_focus5);
-                        }
-                        if (str.length == 1) {
-                          print('send code');
-                        }
-                      }),
+                    controller: _pin6,
+                    focusNode: _focus6,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Color(0xFF364DB9),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 30),
+                    inputFormatters: [LengthLimitingTextInputFormatter(1)],
+                    onChanged: (str) async {
+                      if (str.length == 0) {
+                        FocusScope.of(context).requestFocus(_focus5);
+                      }
+                      if (str.length == 1) {
+                        final _smsCode = _pin1.text +
+                            _pin2.text +
+                            _pin3.text +
+                            _pin4.text +
+                            _pin5.text +
+                            _pin6.text;
+
+                        FirebaseAuth auth = FirebaseAuth.instance;
+
+                        await FirebaseAuth.instance.verifyPhoneNumber(
+                          phoneNumber: widget.object['phoneNumber'],
+                          timeout: const Duration(seconds: 60),
+                          verificationCompleted:
+                              (PhoneAuthCredential credential) async {
+                            User user =
+                                (await auth.signInWithCredential(credential))
+                                    .user;
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(user: user.uid),
+                              ),
+                            );
+                          },
+                          verificationFailed: (FirebaseAuthException e) {
+                            if (e.code == 'invalid-phone-number') {
+                              print('The provided phone number is not valid.');
+                            } else {
+                              print(e.code);
+                            }
+                          },
+                          codeSent:
+                              (String verificationId, int resendToken) async {
+                            // Update the UI - wait for the user to enter the SMS code
+                            String smsCode = _smsCode;
+
+                            // Create a PhoneAuthCredential with the code
+                            PhoneAuthCredential phoneAuthCredential =
+                                PhoneAuthProvider.credential(
+                              verificationId: verificationId,
+                              smsCode: smsCode,
+                            );
+
+                            // Sign the user in (or link) with the credential
+                            User user = (await auth
+                                    .signInWithCredential(phoneAuthCredential))
+                                .user;
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(user: user.uid),
+                              ),
+                            );
+                          },
+                          codeAutoRetrievalTimeout: (String verificationId) {},
+                        );
+                      }
+                    },
+                  ),
                 ),
               ],
             ),

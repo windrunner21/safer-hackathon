@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:safer_hackathon/classes/phone-number-formatter.dart';
+import 'package:safer_hackathon/classes/social-id-formatter.dart';
 import 'package:safer_hackathon/ui/auth-components/verify-page.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -9,6 +11,19 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   // key to check the sign in form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final fullname = TextEditingController();
+  final socialId = TextEditingController();
+  final phoneNumber = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    fullname.dispose();
+    socialId.dispose();
+    phoneNumber.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,15 +66,22 @@ class _SignUpPageState extends State<SignUpPage> {
                         }
                         return null;
                       },
+                      autofocus: true,
+                      controller: fullname,
                       textCapitalization: TextCapitalization.words,
+                      cursorColor: Color(0xFF364DB9),
                       decoration: InputDecoration(
                         labelText: 'Full Name',
-                        helperText: "ex. Name Surname",
                         labelStyle: TextStyle(
                             fontWeight: FontWeight.w500, color: Colors.black54),
                         prefixIcon: Icon(
                           Icons.account_circle,
                           color: Color(0xFF364DB9),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black38)),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFF364DB9)),
                         ),
                       ),
                     ),
@@ -70,17 +92,30 @@ class _SignUpPageState extends State<SignUpPage> {
                         }
                         return null;
                       },
+                      controller: socialId,
                       keyboardType: TextInputType.phone,
+                      inputFormatters: [
+                        SocialIdFormatter(
+                          mask: 'xxxx xxxx',
+                          separator: ' ',
+                        ),
+                      ],
+                      cursorColor: Color(0xFF364DB9),
                       decoration: InputDecoration(
                         labelText: 'Social Identity Number',
                         prefixIcon: Icon(
                           Icons.contacts,
                           color: Color(0xFF364DB9),
                         ),
-                        helperText: "ex. AZE xxxx xxxx",
+                        hintText: "xxxx xxxx",
                         prefixText: "AZE ",
                         labelStyle: TextStyle(
                             fontWeight: FontWeight.w500, color: Colors.black54),
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black38)),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFF364DB9)),
+                        ),
                       ),
                     ),
                     TextFormField(
@@ -90,10 +125,18 @@ class _SignUpPageState extends State<SignUpPage> {
                         }
                         return null;
                       },
+                      controller: phoneNumber,
                       keyboardType: TextInputType.phone,
+                      inputFormatters: [
+                        PhoneNumberFormatter(
+                          mask: '5x xxx xx xx',
+                          separator: ' ',
+                        ),
+                      ],
+                      cursorColor: Color(0xFF364DB9),
                       decoration: InputDecoration(
                         labelText: "Phone Number",
-                        helperText: 'ex. +994 (5x) xxx xx xx',
+                        hintText: '5x xxx xx xx',
                         prefixText: "+994 ",
                         prefixIcon: Icon(
                           Icons.smartphone,
@@ -101,6 +144,11 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         labelStyle: TextStyle(
                             fontWeight: FontWeight.w500, color: Colors.black54),
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black38)),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFF364DB9)),
+                        ),
                       ),
                     ),
                   ],
@@ -111,12 +159,24 @@ class _SignUpPageState extends State<SignUpPage> {
                 width: double.infinity,
                 child: RaisedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => VerifyPhonePage(),
-                      ),
-                    );
+                    if (_formKey.currentState.validate()) {
+                      var finalPhoneNumber =
+                          '+994' + phoneNumber.text.replaceAll(" ", "");
+
+                      var userSignUpInfo = {
+                        'fullname': fullname.text,
+                        'socialId': socialId.text,
+                        'phoneNumber': finalPhoneNumber
+                      };
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              VerifyPhonePage(object: userSignUpInfo),
+                        ),
+                      );
+                    }
                   },
                   child: Text(
                     "Sign Up",

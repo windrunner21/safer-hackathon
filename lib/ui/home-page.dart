@@ -7,6 +7,8 @@ import 'package:safer_hackathon/ui/home-components/profile-page.dart';
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
+  final user;
+  HomePage({Key key, this.user}) : super(key: key);
 }
 
 class _HomePageState extends State<HomePage>

@@ -1,4 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:safer_hackathon/classes/phone-number-formatter.dart';
+
+final databaseReference = FirebaseDatabase.instance.reference();
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -249,6 +254,10 @@ class _ProfilePageState extends State<ProfilePage> {
         return BottomSheet(
           onClosing: () {},
           builder: (BuildContext context) {
+            final emergencyName = TextEditingController();
+            final emergencySurname = TextEditingController();
+            final emergencyPhoneNumber = TextEditingController();
+
             List<Widget> widgetList = [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -269,6 +278,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width / 2.5,
                         child: TextField(
+                          controller: emergencyName,
                           textCapitalization: TextCapitalization.words,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
@@ -287,6 +297,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width / 2.5,
                         child: TextField(
+                          controller: emergencySurname,
                           textCapitalization: TextCapitalization.words,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
@@ -307,7 +318,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   SizedBox(height: 15),
                   SizedBox(
                     child: TextField(
+                      controller: emergencyPhoneNumber,
                       keyboardType: TextInputType.phone,
+                      inputFormatters: [
+                        PhoneNumberFormatter(
+                          mask: '5x xxx xx xx',
+                          separator: ' ',
+                        ),
+                      ],
                       decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           focusedBorder: OutlineInputBorder(
@@ -333,6 +351,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
             ];
+
             return StatefulBuilder(
                 builder: (BuildContext context, setState) => ListView(
                       children: [
@@ -342,16 +361,30 @@ class _ProfilePageState extends State<ProfilePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width / 2,
-                                child: Text(
-                                  "Add emergency contacts",
-                                  style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF364DB9),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width / 2,
+                                    child: Text(
+                                      "Add emergency contacts",
+                                      style: TextStyle(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF364DB9),
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  IconButton(
+                                    icon: Icon(Icons.exit_to_app),
+                                    onPressed: () {
+                                      // await FirebaseAuth.instance.signOut();
+                                      Navigator.pop(context);
+                                    },
+                                  )
+                                ],
                               ),
                               SizedBox(height: 20),
                               Divider(
@@ -392,24 +425,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     ),
                                                   ),
                                                   Visibility(
-                                                    visible: widgetList
-                                                            .elementAt(widgetList
-                                                                    .length +
-                                                                1) ==
-                                                        null,
                                                     child: RaisedButton(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              vertical: 8),
                                                       onPressed: () {
                                                         setState(() {
                                                           widgetList
                                                               .removeLast();
                                                         });
                                                       },
-                                                      child: Icon(
-                                                        Icons.remove,
-                                                        color: Colors.red,
+                                                      child: Text(
+                                                        'Remove',
+                                                        style: TextStyle(
+                                                          color: Colors.red,
+                                                        ),
                                                       ),
                                                       color: Colors.white,
                                                       elevation: 0,
@@ -504,6 +531,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 child: TextField(
                                                   keyboardType:
                                                       TextInputType.phone,
+                                                  inputFormatters: [
+                                                    PhoneNumberFormatter(
+                                                      mask: '5x xxx xx xx',
+                                                      separator: ' ',
+                                                    ),
+                                                  ],
                                                   decoration: InputDecoration(
                                                       border:
                                                           OutlineInputBorder(),
@@ -527,7 +560,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             Color(0xFF364DB9),
                                                       ),
                                                       hintText:
-                                                          '(5x) xxx xx xx'),
+                                                          '(xx) xxx xx xx'),
                                                 ),
                                               ),
                                               SizedBox(height: 20),
@@ -557,6 +590,23 @@ class _ProfilePageState extends State<ProfilePage> {
                                       padding:
                                           EdgeInsets.symmetric(vertical: 10),
                                       onPressed: () async {
+                                        final FirebaseAuth auth =
+                                            FirebaseAuth.instance;
+                                        final User user = auth.currentUser;
+                                        var finalPhoneNumber = '+994' +
+                                            emergencyPhoneNumber.text
+                                                .replaceAll(" ", "");
+
+                                        databaseReference
+                                            .child('citizens')
+                                            .child(user.uid)
+                                            .child('emergencyContacts')
+                                            .set({
+                                          'fullName': emergencyName.text +
+                                              ' ' +
+                                              emergencySurname.text,
+                                          'phoneNumber': finalPhoneNumber,
+                                        });
                                         // await FirebaseAuth.instance.signOut();
                                         Navigator.pop(context);
                                       },

@@ -237,48 +237,78 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-}
 
-Future<void> _setEmergencyContacts(context) async {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-    ),
-    builder: (BuildContext context) {
-      return Wrap(
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(30, 40, 30, 50),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  width: MediaQuery.of(context).size.width / 2,
-                  child: Text(
-                    "Add emergency contacts",
+  Future<void> _setEmergencyContacts(context) async {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+      ),
+      builder: (BuildContext context) {
+        return BottomSheet(
+          onClosing: () {},
+          builder: (BuildContext context) {
+            List<Widget> widgetList = [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 10),
+                  Text(
+                    "Contact #1",
                     style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
                       color: Color(0xFF364DB9),
                     ),
                   ),
-                ),
-                SizedBox(height: 20),
-                Divider(
-                  color: Colors.grey[400],
-                ),
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 2.5,
-                      child: TextField(
-                        textCapitalization: TextCapitalization.words,
-                        decoration: InputDecoration(
+                  SizedBox(height: 15),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 2.5,
+                        child: TextField(
+                          textCapitalization: TextCapitalization.words,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xFF364DB9),
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black12),
+                            ),
+                            hintText: 'Name',
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 2.5,
+                        child: TextField(
+                          textCapitalization: TextCapitalization.words,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xFF364DB9),
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black12),
+                            ),
+                            hintText: 'Surname',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 15),
+                  SizedBox(
+                    child: TextField(
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -288,80 +318,270 @@ Future<void> _setEmergencyContacts(context) async {
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black12),
                           ),
-                          hintText: 'Name',
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 2.5,
-                      child: TextField(
-                        textCapitalization: TextCapitalization.words,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFF364DB9),
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black12),
-                          ),
-                          hintText: 'Surname',
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 15),
-                SizedBox(
-                  child: TextField(
-                    keyboardType: TextInputType.phone,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          prefixText: '+994 ',
+                          prefixIcon: Icon(
+                            Icons.smartphone,
                             color: Color(0xFF364DB9),
                           ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black12),
-                        ),
-                        prefixText: '+994 ',
-                        prefixIcon: Icon(
-                          Icons.smartphone,
-                          color: Color(0xFF364DB9),
-                        ),
-                        hintText: '(5x) xxx xx xx'),
-                  ),
-                ),
-                SizedBox(height: 20),
-                Divider(
-                  color: Colors.grey[400],
-                ),
-                SizedBox(height: 10),
-                SizedBox(
-                  width: double.infinity,
-                  child: RaisedButton(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    color: Color(0xFF364DB9),
-                    elevation: 0,
-                    child: Text(
-                      'Done',
-                      style: TextStyle(fontSize: 16, color: Colors.white),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
+                          hintText: '(5x) xxx xx xx'),
                     ),
                   ),
-                )
-              ],
-            ),
-          )
-        ],
-      );
-    },
-  );
+                  SizedBox(height: 20),
+                  Divider(
+                    color: Colors.grey[400],
+                  ),
+                ],
+              ),
+            ];
+            return StatefulBuilder(
+                builder: (BuildContext context, setState) => ListView(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(30, 80, 30, 50),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width / 2,
+                                child: Text(
+                                  "Add emergency contacts",
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF364DB9),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              Divider(
+                                color: Colors.grey[400],
+                              ),
+                              // start
+                              for (var list in widgetList) list,
+                              // end
+                              SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  RaisedButton(
+                                    padding: EdgeInsets.symmetric(vertical: 8),
+                                    onPressed: () {
+                                      setState(() {
+                                        widgetList.add(
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(height: 10),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    "Contact #" +
+                                                        (widgetList.length + 1)
+                                                            .toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Color(0xFF364DB9),
+                                                    ),
+                                                  ),
+                                                  Visibility(
+                                                    visible: widgetList
+                                                            .elementAt(widgetList
+                                                                    .length +
+                                                                1) ==
+                                                        null,
+                                                    child: RaisedButton(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 8),
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          widgetList
+                                                              .removeLast();
+                                                        });
+                                                      },
+                                                      child: Icon(
+                                                        Icons.remove,
+                                                        color: Colors.red,
+                                                      ),
+                                                      color: Colors.white,
+                                                      elevation: 0,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                        side: BorderSide(
+                                                            color: Colors.red),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 15),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            2.5,
+                                                    child: TextField(
+                                                      textCapitalization:
+                                                          TextCapitalization
+                                                              .words,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        border:
+                                                            OutlineInputBorder(),
+                                                        focusedBorder:
+                                                            OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                            color: Color(
+                                                                0xFF364DB9),
+                                                          ),
+                                                        ),
+                                                        enabledBorder:
+                                                            OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                                  color: Colors
+                                                                      .black12),
+                                                        ),
+                                                        hintText: 'Name',
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            2.5,
+                                                    child: TextField(
+                                                      textCapitalization:
+                                                          TextCapitalization
+                                                              .words,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        border:
+                                                            OutlineInputBorder(),
+                                                        focusedBorder:
+                                                            OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                            color: Color(
+                                                                0xFF364DB9),
+                                                          ),
+                                                        ),
+                                                        enabledBorder:
+                                                            OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                                  color: Colors
+                                                                      .black12),
+                                                        ),
+                                                        hintText: 'Surname',
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 15),
+                                              SizedBox(
+                                                child: TextField(
+                                                  keyboardType:
+                                                      TextInputType.phone,
+                                                  decoration: InputDecoration(
+                                                      border:
+                                                          OutlineInputBorder(),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color:
+                                                              Color(0xFF364DB9),
+                                                        ),
+                                                      ),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color:
+                                                                Colors.black12),
+                                                      ),
+                                                      prefixText: '+994 ',
+                                                      prefixIcon: Icon(
+                                                        Icons.smartphone,
+                                                        color:
+                                                            Color(0xFF364DB9),
+                                                      ),
+                                                      hintText:
+                                                          '(5x) xxx xx xx'),
+                                                ),
+                                              ),
+                                              SizedBox(height: 20),
+                                              Divider(
+                                                color: Colors.grey[400],
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      });
+                                    },
+                                    child: Icon(
+                                      Icons.add,
+                                      color: Color(0xFF364DB9),
+                                    ),
+                                    color: Colors.white,
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      side:
+                                          BorderSide(color: Color(0xFF364DB9)),
+                                    ),
+                                  ),
+                                  SizedBox(width: 15),
+                                  Expanded(
+                                    child: RaisedButton(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 10),
+                                      onPressed: () async {
+                                        // await FirebaseAuth.instance.signOut();
+                                        Navigator.pop(context);
+                                      },
+                                      color: Color(0xFF364DB9),
+                                      elevation: 0,
+                                      child: Text(
+                                        'Done',
+                                        style: TextStyle(
+                                            fontSize: 16, color: Colors.white),
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ));
+          },
+        );
+      },
+    );
+  }
 }

@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.safer_hackathon">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide
@@ -13,6 +16,12 @@
         <!-- Add your Google Maps API Key here -->
 <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyCmRV4g0sR4JYwjzHGg-AmISbCjAVi42P0"/>
+               <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+				<action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+			</intent-filter>
+		</receiver>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

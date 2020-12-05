@@ -3,6 +3,7 @@ import 'package:safer_hackathon/ui/home-components/chat-page.dart';
 import 'package:safer_hackathon/ui/home-components/dashboard-page.dart';
 import 'package:safer_hackathon/ui/home-components/map-page.dart';
 import 'package:safer_hackathon/ui/home-components/profile-page.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -18,6 +19,8 @@ class _HomePageState extends State<HomePage>
     "placeHolder": "placeHolder",
     "orderDelivered": true,
   };
+
+  final databaseReference = FirebaseDatabase.instance.reference();
 
   @override
   Widget build(BuildContext context) {

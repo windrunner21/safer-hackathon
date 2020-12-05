@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "322016123608",
+    "firebase_url": "https://besafe-bedf9-default-rtdb.firebaseio.com",
+    "project_id": "besafe-bedf9",
+    "storage_bucket": "besafe-bedf9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:322016123608:android:eb1800b8f34f69a80115ad",
+        "android_client_info": {
+          "package_name": "com.example.safer_hackathon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "322016123608-rm5ld8g38omjj9gbrdk2s4q2965g39ee.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDflpEaqhNgyI4ZnPIdG6QOz0QWkbEm1SA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "322016123608-rm5ld8g38omjj9gbrdk2s4q2965g39ee.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "322016123608-4ercn12pupc9qe5so296jcj969ssajcu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.inktech.saferHackathon"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

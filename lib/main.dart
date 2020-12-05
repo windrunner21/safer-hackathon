@@ -28,7 +28,6 @@ class MyApp extends StatelessWidget {
             if (snapshot.hasError) {
               print('error occured');
             }
-
             // Once complete, show your application
             if (snapshot.connectionState == ConnectionState.done) {
               return LandingPage();

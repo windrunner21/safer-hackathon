@@ -37,6 +37,7 @@ dependencies:
   url_launcher: ^5.7.10
   encrypt: ^4.1.0
   bubble: ^1.1.9+1
+  slider_button: ^0.6.0
 
 dev_dependencies:
   flutter_test:

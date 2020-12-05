@@ -84,7 +84,6 @@ packages:
       name: cupertino_icons
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "1.0.0"
   encrypt:
     dependency: "direct main"
@@ -93,9 +92,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.0"
-=======
-    version: "1.0.1+1"
->>>>>>> 41cc2954ab303a0b1a579c220c6c182d91540f14
   equatable:
     dependency: transitive
     description:
@@ -173,32 +169,11 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.4.0"
-  firebase_messaging:
-    dependency: "direct main"
-    description:
-      name: firebase_messaging
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "7.0.3"
   flutter:
     dependency: "direct main"
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_local_notifications:
-    dependency: "direct main"
-    description:
-      name: flutter_local_notifications
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.1+7"
-  flutter_local_notifications_platform_interface:
-    dependency: transitive
-    description:
-      name: flutter_local_notifications_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0+1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -396,6 +371,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  slider_button:
+    dependency: "direct main"
+    description:
+      name: slider_button
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.0"
   source_span:
     dependency: transitive
     description:
@@ -444,18 +426,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "0.2.19-nullsafety.2"
-=======
-    version: "0.2.19-nullsafety.6"
-  timezone:
-    dependency: transitive
-    description:
-      name: timezone
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.9"
->>>>>>> 41cc2954ab303a0b1a579c220c6c182d91540f14
   typed_data:
     dependency: transitive
     description:
@@ -512,6 +483,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0-nullsafety.3"
+  vibration:
+    dependency: transitive
+    description:
+      name: vibration
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.7.3"
+  vibration_web:
+    dependency: transitive
+    description:
+      name: vibration_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.6.2"
   win32:
     dependency: transitive
     description:
@@ -519,13 +504,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.4"
-  workmanager:
-    dependency: "direct main"
-    description:
-      name: workmanager
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.5"
   xdg_directories:
     dependency: transitive
     description:

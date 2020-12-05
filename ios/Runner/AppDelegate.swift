@@ -1,7 +1,6 @@
 import UIKit
 import Flutter
 import GoogleMaps
-import workmanager
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -12,7 +11,6 @@ import workmanager
     //Add your Google Maps API Key here
     GMSServices.provideAPIKey("AIzaSyCmRV4g0sR4JYwjzHGg-AmISbCjAVi42P0")
     GeneratedPluginRegistrant.register(with: self)
-    WorkmanagerPlugin.register(with: self.registrar(forPlugin: "be.tramckrijte.workmanager.WorkmanagerPlugin")!)
     UIApplication.shared.setMinimumBackgroundFetchInterval(TimeInterval(5))
 
 

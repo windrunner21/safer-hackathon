@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:google_map_polyline/google_map_polyline.dart';
 
+// 40.364237
+// 49.821660
 class MapPage extends StatefulWidget {
   @override
   _MapPageState createState() => _MapPageState();
@@ -14,14 +18,52 @@ class _MapPageState extends State<MapPage> {
   final databaseReference = FirebaseDatabase.instance.reference();
 
 // Initial location of the Map view
-  CameraPosition _initialLocation = CameraPosition(target: LatLng(0.0, 0.0));
+  CameraPosition _initialLocation =
+      CameraPosition(target: LatLng(40.364237, 49.821660), zoom: 18.0);
 // For controlling the view of the Map
   GoogleMapController mapController;
 
   final Geolocator _geolocator = Geolocator();
   Position _currentPosition;
   Set<Circle> _circles = HashSet<Circle>();
+  Set<Marker> _markers = HashSet<Marker>();
+  // Set<Polyline> polyline = {};
+  // List<LatLng> routeCoords;
+
   int _circleIdCounter = 1;
+  int _markerIdCounter = 1;
+  String googleAPIKey = "AIzaSyCmRV4g0sR4JYwjzHGg-AmISbCjAVi42P0";
+
+  // GoogleMapPolyline googleMapPolyline =
+  //     new GoogleMapPolyline(apiKey: "AIzaSyCmRV4g0sR4JYwjzHGg-AmISbCjAVi42P0");
+
+  // getSomePoints(LatLng destination) async {
+  //   setState(() async {
+  //     routeCoords = await googleMapPolyline.getCoordinatesWithLocation(
+  //         origin: LatLng(_currentPosition.latitude, _currentPosition.longitude),
+  //         destination: destination,
+  //         mode: RouteMode.driving);
+  //   });
+  // }
+
+  _showCupertinoDialog() {
+    showDialog(
+        context: context,
+        builder: (_) => new CupertinoAlertDialog(
+              title: new Text("Danger Alert!"),
+              content: new Text(
+                  "You are in danger! Seek immediate shelter or leave the danger zone!"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Close'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ));
+  }
+
   // Method for retrieving the current location
   _getCurrentLocation() async {
     await _geolocator
@@ -53,9 +95,28 @@ class _MapPageState extends State<MapPage> {
     super.initState();
     _getCurrentLocation();
 
-    databaseReference.child('incomingMissiles').onChildAdded
-        // 37.785834
-        // -122.406417
+    databaseReference
+        .child('safezones')
+        .once()
+        .then((DataSnapshot snapshot) async {
+      for (var safezone in snapshot.value.values) {
+        print(safezone["lat"]);
+        final String markerIdVal = 'marker_id_$_markerIdCounter';
+        _markerIdCounter++;
+        if (_markerIdCounter == 2) {
+          // getSomePoints(LatLng(safezone["lat"], safezone["lng"]));
+        }
+        setState(() {
+          _markers.add(Marker(
+              markerId: MarkerId(markerIdVal),
+              position: LatLng(safezone["lat"], safezone["lng"])));
+        });
+      }
+    });
+
+    databaseReference
+        .child('incomingMissiles')
+        .onChildAdded
         .listen((event) async {
       print(event.snapshot.value);
 
@@ -71,20 +132,78 @@ class _MapPageState extends State<MapPage> {
           currentPosition.longitude,
         );
         if (distanceInMeters <= event.snapshot.value["radius"]) {
-          setState(() {
-            final String circleIdVal = 'circle_id_$_circleIdCounter';
-            _circleIdCounter++;
-            _circles.add(Circle(
-                circleId: CircleId(circleIdVal),
-                center: LatLng(event.snapshot.value["lat"].toDouble(),
-                    event.snapshot.value["lng"].toDouble()),
-                radius: event.snapshot.value["radius"].toDouble(),
-                fillColor: Colors.redAccent.withOpacity(0.5),
-                strokeWidth: 3,
-                strokeColor: Colors.redAccent));
-          });
+          _showCupertinoDialog();
         }
-        print("too far");
+        // if (distanceInMeters <= event.snapshot.value["radius"]) {
+        setState(() {
+          final String circleIdVal = 'circle_id_$_circleIdCounter';
+          _circleIdCounter++;
+          _circles.add(Circle(
+              circleId: CircleId(circleIdVal),
+              center: LatLng(event.snapshot.value["lat"].toDouble(),
+                  event.snapshot.value["lng"].toDouble()),
+              radius: event.snapshot.value["radius"].toDouble(),
+              fillColor: Colors.redAccent.withOpacity(0.5),
+              strokeWidth: 3,
+              strokeColor: Colors.redAccent));
+        });
+        // }
+      });
+    });
+
+    databaseReference.child('userDangers').onChildAdded.listen((event) async {
+      print(event.snapshot.value);
+
+      await _geolocator
+          .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+          .then((Position currentPosition) async {
+        // Calculating the distance between the start and the end positions
+// with a straight path, without considering any route
+        double distanceInMeters = await _geolocator.distanceBetween(
+          event.snapshot.value["lat"].toDouble(),
+          event.snapshot.value["lng"].toDouble(),
+          currentPosition.latitude,
+          currentPosition.longitude,
+        );
+        var dangerType = event.snapshot.value["type"];
+        var radius = dangerType == "Landmine"
+            ? 5
+            : dangerType == "Fire"
+                ? 10
+                : dangerType == "Homicide"
+                    ? 5
+                    : 50;
+        if (distanceInMeters <= radius.toDouble()) {
+          _showCupertinoDialog();
+        }
+
+        // if (distanceInMeters <= event.snapshot.value["radius"]) {
+        setState(() {
+          final String circleIdVal = 'circle_idd_$_circleIdCounter';
+          _circleIdCounter++;
+          _circles.add(Circle(
+            circleId: CircleId(circleIdVal),
+            center: LatLng(event.snapshot.value["lat"].toDouble(),
+                event.snapshot.value["lng"].toDouble()),
+            radius: radius.toDouble(),
+            fillColor: dangerType == "Landmine"
+                ? Colors.purpleAccent.withOpacity(0.5)
+                : dangerType == "Fire"
+                    ? Colors.orangeAccent.withOpacity(0.5)
+                    : dangerType == "Homicide"
+                        ? Colors.amberAccent.withOpacity(0.5)
+                        : Colors.limeAccent.withOpacity(0.5),
+            strokeWidth: 3,
+            strokeColor: dangerType == "Landmine"
+                ? Colors.purpleAccent
+                : dangerType == "Fire"
+                    ? Colors.orangeAccent
+                    : dangerType == "Homicide"
+                        ? Colors.amberAccent
+                        : Colors.limeAccent,
+          ));
+        });
+        // }
       });
     });
   }
@@ -127,8 +246,19 @@ class _MapPageState extends State<MapPage> {
               zoomGesturesEnabled: true,
               zoomControlsEnabled: false,
               circles: _circles,
+              markers: _markers,
+              // polylines: polyline,
               onMapCreated: (GoogleMapController controller) {
                 mapController = controller;
+                // polyline.add(Polyline(
+                //     polylineId: PolylineId("route1"),
+                //     visible: true,
+                //     points: routeCoords,
+                //     width: 4,
+                //     color: Colors.blue,
+                //     startCap: Cap.roundCap,
+                //     endCap: Cap.buttCap));
+                _getCurrentLocation();
               },
             ),
             // Show zoom buttons

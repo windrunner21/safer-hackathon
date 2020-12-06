@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:slider_button/slider_button.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -9,6 +11,11 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final Geolocator _geolocator = Geolocator();
+  Position _currentPosition;
+
+  final databaseReference = FirebaseDatabase.instance.reference();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,7 +99,7 @@ class _DashboardPageState extends State<DashboardPage> {
             var dangers = [
               {'id': 0, 'type': 'Landmine'},
               {'id': 1, 'type': 'Fire'},
-              {'id': 2, 'type': 'Homocide'},
+              {'id': 2, 'type': 'Homicide'},
               {'id': 3, 'type': 'Earthquake'},
             ];
 
@@ -172,6 +179,24 @@ class _DashboardPageState extends State<DashboardPage> {
                                           highlightedColor: Colors.red,
                                           vibrationFlag: true,
                                           action: () {
+                                            _geolocator
+                                                .getCurrentPosition(
+                                                    desiredAccuracy:
+                                                        LocationAccuracy.best)
+                                                .then(
+                                                    (Position position) async {
+                                              databaseReference
+                                                  .child("userDangers")
+                                                  .push()
+                                                  .set({
+                                                "lat": position.latitude,
+                                                "lng": position.longitude,
+                                                "type": danger["type"]
+                                              });
+                                              print(danger["type"]);
+                                              print(position.latitude);
+                                            });
+
                                             Navigator.pop(context);
                                             final snackBar = SnackBar(
                                               content: Text(
